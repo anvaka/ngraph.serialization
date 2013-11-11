@@ -1,8 +1,3 @@
-module.exports = {
-  save: save,
-  load: load
-};
-
 /**
  * # JSON Storage
  *
@@ -19,6 +14,11 @@ module.exports = {
  *   // loadedGraph is a copy of original `graph`
  * ```
  */
+
+module.exports = {
+  save: save,
+  load: load
+};
 
 // Save
 // ----
