@@ -17,6 +17,26 @@ test('Can load mtx graph', function (t) {
   t.end();
 });
 
+test('Can save to array', function (t) {
+  var g = mtx.load(testData);
+
+  t.test('Includes data', function (t) { 
+    var saved = mtx.saveToObject(g),
+        linksCount = g.getLinksCount();
+    t.equal(saved.recordsPerEdge, 3, 'Should have three records per edge')
+    t.equal(saved.links.length, linksCount * saved.recordsPerEdge, 'Should save data by default');
+    t.end();
+  });
+
+  t.test('Skips data when not required', function (t) { 
+    var saved = mtx.saveToObject(g, false),
+        linksCount = g.getLinksCount();
+    t.equal(saved.recordsPerEdge, 2, 'Should have two records per edge')
+    t.equal(saved.links.length, linksCount * saved.recordsPerEdge, 'Should save data by default');
+    t.end();
+  });
+});
+
 function loadTestData() {
   return [
     '%%MatrixMarket matrix coordinate real general',

@@ -11,7 +11,8 @@
 
 module.exports = {
   load: load,
-  createLineParser: createLineParser
+  createLineParser: createLineParser,
+  saveToObject: saveToObject
 };
 
 
@@ -67,4 +68,42 @@ function load (mtxText) {
 function createLineParser() {
   var createMtxParser = require('./mtxParser');
   return createMtxParser();
+}
+
+/**
+ * This function saves graph into object with the following fields:
+ *  `edges` - array of edges written in a row.
+ *  `dimension` - number of elements in `edges` array per edge
+ *
+ * Each edge record in the array includes `from` and `to` ids (which are numbers)
+ * If `includeData` is truthy then each record will also include data associated
+ * with link
+ */
+function saveToObject (graph, includeData) {
+  if (!graph) {
+    throw new Error('Graph is required to saveArray method');
+  }
+  includeData = (includeData === undefined) || !!includeData;
+  var links = [],
+      savedObject = {
+        recordsPerEdge: includeData ? 3 : 2,
+        links: links
+      };
+
+  graph.forEachLink(function (link) {
+    if (typeof link.fromId !== 'number' || typeof link.toId !== 'number') {
+      throw new Error('saveToObject can only work with numbers as node ids.');
+    }
+    links.push(link.fromId);
+    links.push(link.toId);
+    if (includeData) {
+      if (typeof link.data !== 'number') {
+        // forgive or throw?
+        throw new Error('Links data should be a number');
+      }
+      links.push(link.data);
+    }
+  });
+
+  return savedObject;
 }
