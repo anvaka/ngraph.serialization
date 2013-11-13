@@ -6,9 +6,31 @@ var test = require('tap').test,
 test('Can load mtx graph', function (t) {
   var g = mtx.load(testData);
 
-  t.equal(g.getNodesCount(), 5, "Should be expected number of nodes");
-  t.equal(g.getLinksCount(), 3, "Should be expected number of links");
-  t.ok(g.hasLink(1, 4), "There is link between 1 and 4");
+  t.equal(g.getNodesCount(), 5, 'Should be expected number of nodes');
+  t.equal(g.getLinksCount(), 3, 'Should be expected number of links');
+  t.ok(g.hasLink(1, 4), 'There is link between 1 and 4');
+
+  // Our implementation does not allow loops, thus any loop within mtx format
+  // is considered as a node data itself. Please let me know if you think
+  // it's a show stopper for you, and I'll make this work ;-]
+  t.equal(g.getNode(2).data, 1.5, "No loops");
+  t.end();
+});
+
+test('Can use mtxParser', function (t) {
+  var mtxArray = testData.split('\n'),
+      mtxParser = mtx.createLineParser();
+
+  mtxArray.forEach(function(line) {
+    mtxParser.parse(line);
+  });
+
+  var g = mtxParser.getGraph();
+
+  t.equal(g.getNodesCount(), 5, 'Should be expected number of nodes');
+  t.equal(g.getLinksCount(), 3, 'Should be expected number of links');
+  t.ok(g.hasLink(1, 4), 'There is link between 1 and 4');
+  t.ok(mtxParser.getDescription, 'Contains description');
 
   // Our implementation does not allow loops, thus any loop within mtx format
   // is considered as a node data itself. Please let me know if you think

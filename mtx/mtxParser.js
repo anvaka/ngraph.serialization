@@ -60,6 +60,9 @@ function mtxParser() {
     getGraph: function () {
       return graph;
     },
+    getDescription: function () {
+      return description;
+    },
     parse: parse
   };
 
