@@ -61,7 +61,7 @@ function mtxParser() {
       return graph;
     },
     getDescription: function () {
-      return description;
+      return description && description.join('\n');
     },
     parse: parse
   };

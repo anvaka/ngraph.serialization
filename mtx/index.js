@@ -41,7 +41,10 @@ function load (mtxText) {
     mtxParser.parse(line);
   });
 
-  return mtxParser.getGraph();
+  var graph = mtxParser.getGraph();
+  graph.description = mtxParser.getDescription();
+
+  return graph;
 }
 
 /**
