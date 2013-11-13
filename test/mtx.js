@@ -30,7 +30,7 @@ test('Can use mtxParser', function (t) {
   t.equal(g.getNodesCount(), 5, 'Should be expected number of nodes');
   t.equal(g.getLinksCount(), 3, 'Should be expected number of links');
   t.ok(g.hasLink(1, 4), 'There is link between 1 and 4');
-  t.ok(mtxParser.getDescription, 'Contains description');
+  t.ok(mtxParser.getDescription(), 'Contains description');
 
   // Our implementation does not allow loops, thus any loop within mtx format
   // is considered as a node data itself. Please let me know if you think
