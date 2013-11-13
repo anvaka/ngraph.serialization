@@ -88,7 +88,8 @@ function saveToObject (graph, includeData) {
       savedObject = {
         recordsPerEdge: includeData ? 3 : 2,
         links: links
-      };
+      },
+      canChangeIncludeData = true;
 
   graph.forEachLink(function (link) {
     if (typeof link.fromId !== 'number' || typeof link.toId !== 'number') {
@@ -98,9 +99,18 @@ function saveToObject (graph, includeData) {
     links.push(link.toId);
     if (includeData) {
       if (typeof link.data !== 'number') {
-        // forgive or throw?
-        throw new Error('Links data should be a number');
+        if (canChangeIncludeData) {
+          includeData = false;
+          // we actually don't have any data associated with links.
+          // change our mind:
+          savedObject.recordsPerEdge = 2;
+          return;
+        } else {
+          throw new Error('Some links are missing data');
+        }
       }
+      // we can only change includeData once:
+      canChangeIncludeData = false;
       links.push(link.data);
     }
   });

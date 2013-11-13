@@ -35,6 +35,18 @@ test('Can save to array', function (t) {
     t.equal(saved.links.length, linksCount * saved.recordsPerEdge, 'Should save data by default');
     t.end();
   });
+
+  t.test('Skips data when there is no data', function (t) { 
+    var g = createGraph();
+    g.addLink(1, 2); // no data
+    g.addLink(2, 3); // no data
+
+    var includeData = true; // explicitly require to include data
+    var saved = mtx.saveToObject(g, includeData);
+    t.equal(saved.recordsPerEdge, 2, 'Should have two records per edge')
+    t.equal(saved.links.length, 2 * saved.recordsPerEdge, 'Should save data by default');
+    t.end();
+  });
 });
 
 function loadTestData() {
