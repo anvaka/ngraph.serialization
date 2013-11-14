@@ -39,10 +39,10 @@ test('Can use mtxParser', function (t) {
   t.end();
 });
 
-test('Can save to array', function (t) {
+test('Can save/load object', function (t) {
   var g = mtx.load(testData);
 
-  t.test('Includes data', function (t) { 
+  t.test('Includes data', function (t) {
     var saved = mtx.saveToObject(g),
         linksCount = g.getLinksCount();
     t.equal(saved.recordsPerEdge, 3, 'Should have three records per edge')
@@ -50,7 +50,7 @@ test('Can save to array', function (t) {
     t.end();
   });
 
-  t.test('Skips data when not required', function (t) { 
+  t.test('Skips data when not required', function (t) {
     var saved = mtx.saveToObject(g, false),
         linksCount = g.getLinksCount();
     t.equal(saved.recordsPerEdge, 2, 'Should have two records per edge')
@@ -58,7 +58,7 @@ test('Can save to array', function (t) {
     t.end();
   });
 
-  t.test('Skips data when there is no data', function (t) { 
+  t.test('Skips data when there is no data', function (t) {
     var g = createGraph();
     g.addLink(1, 2); // no data
     g.addLink(2, 3); // no data
@@ -67,6 +67,34 @@ test('Can save to array', function (t) {
     var saved = mtx.saveToObject(g, includeData);
     t.equal(saved.recordsPerEdge, 2, 'Should have two records per edge')
     t.equal(saved.links.length, 2 * saved.recordsPerEdge, 'Should save data by default');
+    t.end();
+  });
+
+  t.test('Can save and load graph with data', function (t) {
+    var g = createGraph();
+    g.addLink(1, 2, 1); g.addLink(2, 3, 2);
+
+    var includeData = true;
+    var saved = mtx.saveToObject(g, includeData);
+    var g1 = mtx.loadFromObject(saved);
+    var link12 = g1.hasLink(1, 2), link23 = g1.hasLink(2, 3);
+    t.ok(link12 && link23 && g1.getLinksCount() === 2, 'Has all links');
+    t.equal(link12.data, 1, "Link12 has valid data");
+    t.equal(link23.data, 2, "Link23 has valid data");
+    t.end();
+  });
+
+  t.test('Can save and load graph without data', function (t) {
+    var g = createGraph();
+    g.addLink(1, 2, 1); g.addLink(2, 3, 2);
+
+    var includeData = false;
+    var saved = mtx.saveToObject(g, includeData);
+    var g1 = mtx.loadFromObject(saved);
+    var link12 = g1.hasLink(1, 2), link23 = g1.hasLink(2, 3);
+    t.ok(link12 && link23 && g1.getLinksCount() === 2, 'Has all links');
+    t.ok(!link12.data, "Link12 has no data");
+    t.ok(!link23.data, "Link23 has no data");
     t.end();
   });
 });

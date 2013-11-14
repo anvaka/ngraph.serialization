@@ -12,7 +12,8 @@
 module.exports = {
   load: load,
   createLineParser: createLineParser,
-  saveToObject: saveToObject
+  saveToObject: saveToObject,
+  loadFromObject: loadFromObject
 };
 
 
@@ -119,4 +120,40 @@ function saveToObject (graph, includeData) {
   });
 
   return savedObject;
+}
+
+/**
+ * This function creates a graph structure from mtx object. An mtx object
+ * is a return value from saveToObject() method, described above.
+ *
+ * @returns {ngraph.graph}
+ */
+function loadFromObject (mtxObject) {
+  var mtxObjectIsValid = mtxObject && typeof mtxObject.recordsPerEdge === 'number'
+                         && mtxObject.links !== undefined;
+  if (!mtxObjectIsValid) {
+    throw new Error('Unexpected mtxObject passed to loadFromObject() method');
+  }
+  var recordsPerEdge = mtxObject.recordsPerEdge,
+      links = mtxObject.links;
+
+  if (links.length % recordsPerEdge !== 0) {
+    throw new Error('Number of edges is not valid for this object');
+  }
+
+  var createGraph = require('ngraph.graph'),
+      graph = createGraph(),
+      from, to, data;
+
+  for (var i = 0; i < links.length; i += recordsPerEdge) {
+    from = links[i];
+    to = links[i + 1];
+    if (recordsPerEdge === 3) {
+      data = links[i + 2];
+    }
+    graph.addLink(from, to , data);
+  }
+  graph.description = mtxObject.description;
+
+  return graph;
 }
