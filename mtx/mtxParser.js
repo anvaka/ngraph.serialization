@@ -6,7 +6,7 @@
  *
  * _NOTE_: Current implementation intentionally treats loops as node associated data.
  *
- * Example of Matrix market fomrat:
+ * Example of Matrix market format:
  *
  * ```
  * %%MatrixMarket matrix coordinate real general
