@@ -1,6 +1,6 @@
 {
   "name": "ngraph.serialization",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Graph serialization library for ngraph.*",
   "main": "index.js",
   "scripts": {
