@@ -12,3 +12,8 @@ format suitable for representing general sparse matrices. Only nonzero entries
 are provided, and the coordinates of each nonzero entry is given explicitly.
 Most notably this format is used to store
 [University of Florida Sparse Matrix Collection](http://www.cise.ufl.edu/research/sparse/matrices/index.html)
+
+You can also use specialized serializers:
+
+* [ngraph.fromdot](github.com/anvaka/ngraph.fromdot) - load graph from DOT format
+* [ngraph.todot](github.com/anvaka/ngraph.todot) - saves graph as DOT format
