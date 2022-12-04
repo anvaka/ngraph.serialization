@@ -17,3 +17,5 @@ You can also use specialized serializers:
 
 * [ngraph.fromdot](github.com/anvaka/ngraph.fromdot) - load graph from DOT format
 * [ngraph.todot](github.com/anvaka/ngraph.todot) - saves graph as DOT format
+* [ngraph.fromjson](github.com/anvaka/ngraph.fromjson) - load graph from JSON format
+* [ngraph.tojson](github.com/anvaka/ngraph.tojson) - saves graph as JSON format
